@@ -16,6 +16,8 @@ var (
 )
 
 func main() {
+	flag.Parse()
+	fmt.Printf("running on interface %s\n", *netInterface)
 	config, err := config.Run(*netInterface)
 	if err != nil {
 		fmt.Printf("generation config failure: %v\n", err)
