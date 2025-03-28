@@ -6,24 +6,34 @@ import (
 	"log"
 )
 
-type Context struct {
-	Cameras []cam.PtzCamera
+type Camera struct {
+	Config        cfg.Camera
+	PtzController cam.PtzCamera
 }
 
-func CreateContext(configs []cfg.Camera) Context {
-	cameras := make([]cam.PtzCamera, 0, len(configs))
-	for _, c := range configs {
+type Context struct {
+	Settings *cfg.Settings
+	Cameras  []Camera
+}
+
+func CreateContext(config *cfg.Config) Context {
+	cameras := make([]Camera, 0, len(config.Cameras))
+	for _, c := range config.Cameras {
 		camera, err := cam.Create(&c)
 		if err != nil {
 			log.Printf("failed to create %s camera: %v\n", c.Label, err)
 			continue
 		}
-		cameras = append(cameras, camera)
+		cameras = append(cameras, Camera{
+			Config:        c,
+			PtzController: camera,
+		})
 	}
 
 	log.Printf("Found %d cameras", len(cameras))
 
 	return Context{
-		Cameras: cameras,
+		Settings: &config.Settings,
+		Cameras:  cameras,
 	}
 }

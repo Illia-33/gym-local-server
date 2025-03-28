@@ -3,6 +3,11 @@ package api
 type CamerasRequest struct {
 }
 
+type CameraDescription struct {
+	Label       string `json:"label"`
+	Description string `json:"description"`
+}
+
 type CamerasResponse struct {
-	Count int `json:"count"`
+	Cameras []CameraDescription `json:"cameras"`
 }

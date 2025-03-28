@@ -60,7 +60,6 @@ func Run(interfaceName string) (*Config, error) {
 		camera.Type = TypeOnvif
 		camera.Login = "<camera_login>"
 		camera.Password = "<camera_password>"
-		camera.VideoTransport = TransportTcp
 
 		config.Cameras = append(config.Cameras, camera)
 	}

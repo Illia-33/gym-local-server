@@ -8,8 +8,16 @@ import (
 )
 
 func doGetCamerasInfo(ctx *Context, _ api.CamerasRequest) api.CamerasResponse {
+	cameras := make([]api.CameraDescription, 0, len(ctx.Cameras))
+	for _, camera := range ctx.Cameras {
+		cameras = append(cameras, api.CameraDescription{
+			Label:       camera.Config.Label,
+			Description: camera.Config.Description,
+		})
+	}
+
 	return api.CamerasResponse{
-		Count: len(ctx.Cameras),
+		Cameras: cameras,
 	}
 }
 

@@ -33,7 +33,7 @@ func doStartPtz(ctx *Context, cameraId int, r api.StartPtzRequest) api.StartPtzR
 	if err != nil {
 		return api.StartPtzResponse{}
 	}
-	ctx.Cameras[cameraId].StartPtz(camera.PtzVelocity{
+	ctx.Cameras[cameraId].PtzController.StartPtz(camera.PtzVelocity{
 		Pan:  r.Velocity.Pan,
 		Tilt: r.Velocity.Tilt,
 		Zoom: r.Velocity.Zoom,
@@ -42,7 +42,7 @@ func doStartPtz(ctx *Context, cameraId int, r api.StartPtzRequest) api.StartPtzR
 }
 
 func doStopPtz(ctx *Context, cameraId int, _ api.EndPtzRequest) api.EndPtzResponse {
-	ctx.Cameras[cameraId].StopPtz()
+	ctx.Cameras[cameraId].PtzController.StopPtz()
 	return api.EndPtzResponse{}
 }
 
