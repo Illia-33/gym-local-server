@@ -2,11 +2,12 @@ package handlers
 
 import (
 	"errors"
-	"gymlocalserver/camera"
-	"gymlocalserver/server/api"
 	"net/http"
 	"strconv"
 	"time"
+
+	"github.com/Illia-33/gym-localserver/camera"
+	"github.com/Illia-33/gym-localserver/server/api"
 
 	"github.com/gin-gonic/gin"
 )

@@ -1,4 +1,4 @@
-module gymlocalserver
+module github.com/Illia-33/gym-localserver
 
 go 1.24.0
 

@@ -3,11 +3,12 @@ package main
 import (
 	"bytes"
 	"fmt"
-	cfg "gymlocalserver/config"
-	"gymlocalserver/server/handlers"
 	"log"
 	"net/http"
 	"time"
+
+	cfg "github.com/Illia-33/gym-localserver/config"
+	"github.com/Illia-33/gym-localserver/server/handlers"
 
 	"github.com/gin-gonic/gin"
 )

@@ -2,10 +2,11 @@ package main
 
 import (
 	"flag"
-	"gymlocalserver/camera"
-	cfg "gymlocalserver/config"
 	"log"
 	"os"
+
+	"github.com/Illia-33/gym-localserver/camera"
+	cfg "github.com/Illia-33/gym-localserver/config"
 
 	"gopkg.in/yaml.v3"
 )

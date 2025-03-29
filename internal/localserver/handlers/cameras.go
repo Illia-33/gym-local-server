@@ -1,8 +1,9 @@
 package handlers
 
 import (
-	"gymlocalserver/server/api"
 	"net/http"
+
+	"github.com/Illia-33/gym-localserver/server/api"
 
 	"github.com/gin-gonic/gin"
 )

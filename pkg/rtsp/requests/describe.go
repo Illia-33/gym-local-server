@@ -3,8 +3,9 @@ package requests
 import (
 	"bytes"
 	"errors"
-	"gymlocalserver/rtsp/sdp"
 	"strings"
+
+	"github.com/Illia-33/gym-localserver/rtsp/sdp"
 )
 
 type DescribeResponse struct {

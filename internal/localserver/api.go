@@ -1,7 +1,7 @@
 package main
 
 import (
-	"gymlocalserver/server/handlers"
+	"github.com/Illia-33/gym-localserver/server/handlers"
 
 	"github.com/gin-gonic/gin"
 )

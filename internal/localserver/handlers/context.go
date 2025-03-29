@@ -1,9 +1,10 @@
 package handlers
 
 import (
-	cam "gymlocalserver/camera"
-	cfg "gymlocalserver/config"
 	"log"
+
+	cam "github.com/Illia-33/gym-localserver/camera"
+	cfg "github.com/Illia-33/gym-localserver/config"
 )
 
 type Camera struct {

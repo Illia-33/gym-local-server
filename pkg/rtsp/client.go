@@ -2,11 +2,12 @@ package rtsp
 
 import (
 	"bufio"
-	"gymlocalserver/rtsp/requests"
 	"log"
 	"net"
 	"net/url"
 	"strings"
+
+	"github.com/Illia-33/gym-localserver/rtsp/requests"
 )
 
 const (

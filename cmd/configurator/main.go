@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"os"
 
-	"gymlocalserver/config"
+	"github.com/Illia-33/gym-localserver/config"
 
 	"gopkg.in/yaml.v3"
 )

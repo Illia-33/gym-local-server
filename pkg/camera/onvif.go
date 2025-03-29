@@ -3,10 +3,11 @@ package camera
 import (
 	"context"
 	"fmt"
-	cfg "gymlocalserver/config"
 	"log"
 	"net/http"
 	"time"
+
+	cfg "github.com/Illia-33/gym-localserver/config"
 
 	onvif "github.com/use-go/onvif"
 	"github.com/use-go/onvif/media"
