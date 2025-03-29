@@ -1,7 +1,7 @@
 package camera
 
 import (
-	cfg "github.com/Illia-33/gym-localserver/config"
+	cfg "github.com/Illia-33/gym-localserver/pkg/config"
 
 	"fmt"
 )

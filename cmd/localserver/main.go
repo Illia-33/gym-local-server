@@ -5,8 +5,8 @@ import (
 	"log"
 	"os"
 
-	"github.com/Illia-33/gym-localserver/camera"
-	cfg "github.com/Illia-33/gym-localserver/config"
+	"github.com/Illia-33/gym-localserver/pkg/camera"
+	cfg "github.com/Illia-33/gym-localserver/pkg/config"
 
 	"gopkg.in/yaml.v3"
 )

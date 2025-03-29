@@ -7,7 +7,7 @@ import (
 	"net/url"
 	"strings"
 
-	"github.com/Illia-33/gym-localserver/rtsp/requests"
+	"github.com/Illia-33/gym-localserver/pkg/rtsp/requests"
 )
 
 const (

@@ -3,8 +3,8 @@ package handlers
 import (
 	"log"
 
-	cam "github.com/Illia-33/gym-localserver/camera"
-	cfg "github.com/Illia-33/gym-localserver/config"
+	cam "github.com/Illia-33/gym-localserver/pkg/camera"
+	cfg "github.com/Illia-33/gym-localserver/pkg/config"
 )
 
 type Camera struct {

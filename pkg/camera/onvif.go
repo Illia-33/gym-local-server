@@ -7,7 +7,7 @@ import (
 	"net/http"
 	"time"
 
-	cfg "github.com/Illia-33/gym-localserver/config"
+	cfg "github.com/Illia-33/gym-localserver/pkg/config"
 
 	onvif "github.com/use-go/onvif"
 	"github.com/use-go/onvif/media"

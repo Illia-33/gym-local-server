@@ -6,8 +6,8 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/Illia-33/gym-localserver/camera"
-	"github.com/Illia-33/gym-localserver/server/api"
+	api "github.com/Illia-33/gym-localserver/api/localserver"
+	"github.com/Illia-33/gym-localserver/pkg/camera"
 
 	"github.com/gin-gonic/gin"
 )

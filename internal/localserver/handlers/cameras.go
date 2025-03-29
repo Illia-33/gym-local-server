@@ -3,7 +3,7 @@ package handlers
 import (
 	"net/http"
 
-	"github.com/Illia-33/gym-localserver/server/api"
+	api "github.com/Illia-33/gym-localserver/api/localserver"
 
 	"github.com/gin-gonic/gin"
 )

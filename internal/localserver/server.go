@@ -7,8 +7,8 @@ import (
 	"net/http"
 	"time"
 
-	cfg "github.com/Illia-33/gym-localserver/config"
-	"github.com/Illia-33/gym-localserver/server/handlers"
+	"github.com/Illia-33/gym-localserver/internal/localserver/handlers"
+	cfg "github.com/Illia-33/gym-localserver/pkg/config"
 
 	"github.com/gin-gonic/gin"
 )
