@@ -3,11 +3,11 @@ all: configurator server
 
 .PHONY: configurator
 configurator:
-	go build -o ./cfgr ./configurator
+	go build -o cfgr ./cmd/configurator
 
 .PHONY: server
 server:
-	go build -o ./srvr ./server
+	go build -o srvr ./cmd/localserver
 
 .PHONY: config
 config: configurator

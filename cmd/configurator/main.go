@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/Illia-33/gym-localserver/pkg/config"
+	configGenerator "github.com/Illia-33/gym-localserver/internal/config/generator"
 
 	"gopkg.in/yaml.v3"
 )
@@ -18,7 +18,7 @@ var (
 func main() {
 	flag.Parse()
 	fmt.Printf("running on interface %s\n", *netInterface)
-	config, err := config.Run(*netInterface)
+	config, err := configGenerator.Run(*netInterface)
 	if err != nil {
 		fmt.Printf("generation config failure: %v\n", err)
 		os.Exit(1)

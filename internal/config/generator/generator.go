@@ -1,10 +1,11 @@
-package config
+package generator
 
 import (
 	"fmt"
 	"strconv"
 	"strings"
 
+	cfg "github.com/Illia-33/gym-localserver/pkg/config"
 	"github.com/beevik/etree"
 	discovery "github.com/use-go/onvif/ws-discovery"
 )
@@ -14,18 +15,18 @@ type Host struct {
 	Name string `json:"name"`
 }
 
-func Run(interfaceName string) (*Config, error) {
+func Run(interfaceName string) (*cfg.Config, error) {
 	devices, err := discovery.SendProbe(interfaceName, nil, []string{"dn:NetworkVideoTransmitter"}, map[string]string{"dn": "http://www.onvif.org/ver10/network/wsdl"})
 	if err != nil {
 		return nil, err
 	}
 
-	var config Config
+	var config cfg.Config
 	foundXaddrs := map[string]bool{}
-	config.Cameras = make([]Camera, 0, len(devices))
+	config.Cameras = make([]cfg.Camera, 0, len(devices))
 
 	for i, deviceInfo := range devices {
-		var camera Camera
+		var camera cfg.Camera
 
 		doc := etree.NewDocument()
 		if err := doc.ReadFromString(deviceInfo); err != nil {
@@ -49,7 +50,7 @@ func Run(interfaceName string) (*Config, error) {
 
 			foundXaddrs[xaddr] = true
 			camera.Ip = splitXaddr[0]
-			camera.Port = Port(port)
+			camera.Port = cfg.Port(port)
 		}
 
 		if alreadyFound {
@@ -57,7 +58,7 @@ func Run(interfaceName string) (*Config, error) {
 		}
 
 		camera.Label = fmt.Sprintf("camera_%d", i)
-		camera.Type = TypeOnvif
+		camera.Type = cfg.TypeOnvif
 		camera.Login = "<camera_login>"
 		camera.Password = "<camera_password>"
 

@@ -8,6 +8,8 @@ import (
 	"github.com/Illia-33/gym-localserver/pkg/camera"
 	cfg "github.com/Illia-33/gym-localserver/pkg/config"
 
+	"github.com/Illia-33/gym-localserver/internal/localserver"
+
 	"gopkg.in/yaml.v3"
 )
 
@@ -31,6 +33,6 @@ func main() {
 		log.Fatalf("yaml unmarshal failed: %v", err)
 	}
 
-	server := Create(*bind, &config)
+	server := localserver.Create(*bind, &config)
 	server.Run()
 }

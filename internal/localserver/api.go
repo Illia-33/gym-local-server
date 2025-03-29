@@ -1,4 +1,4 @@
-package main
+package localserver
 
 import (
 	"github.com/Illia-33/gym-localserver/internal/localserver/handlers"
