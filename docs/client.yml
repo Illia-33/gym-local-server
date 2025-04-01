@@ -1,0 +1,112 @@
+openapi: 3.0.2
+info:
+  version: 1.0.0
+  title: local server schema
+tags:
+  - name: camera
+paths:
+  /cameras:
+    tags:
+      - camera
+    get:
+      operationId: getCameras
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CamerasList'
+  /cameras/{cameraId}/ptz:
+    post:
+      tags:
+        - camera
+      operationId: startCameraAction
+      parameters:
+        - name: cameraId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/CameraId'
+      responses:
+        '200':
+            $ref: '#/components/responses/Ok'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ActionParams'
+    delete:
+      tags:
+        - camera
+      operationId: stopCameraAction
+      parameters:
+        - name: cameraId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/CameraId'
+      responses:
+        '200':
+            $ref: '#/components/responses/Ok'
+components:
+  schemas:
+    ActionParams:
+        type: object
+        required:
+          - velocity
+          - deadline
+        properties:
+            velocity:
+              type: object
+              required:
+                - pan
+                - tilt
+                - zoom
+              properties:
+                pan:
+                    type: number
+                    format: float
+                tilt:
+                    type: number
+                    format: float
+                zoom:
+                    type: number
+                    format: float
+            deadline:
+              type: string
+    CamerasList:
+      description: Local server cameras list
+      type: object
+      required:
+        - cameras
+      properties:
+          cameras:
+            type: array
+            items:
+              $ref: '#/components/schemas/Camera'
+    Camera:
+      description: Local server cameras info
+      type: object
+      required:
+        - camera_id
+        - description
+      properties:
+          camera_id:
+            $ref: '#/components/schemas/CameraId'
+          description:
+            description: Camera area description
+            type: string
+    CameraId:
+      description: Camera unique id in local gym server
+      $ref: '#/components/schemas/Id'
+    Id:
+      type: integer
+      format: int64
+  responses:
+    Ok:
+      content:
+        application/json:
+          schema:
+            type: object
+
