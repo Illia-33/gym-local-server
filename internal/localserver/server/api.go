@@ -41,9 +41,9 @@ type handler[BodyType any, ResponseType any] func(context.Context, requestParams
 func handle[BodyType any, ResponseType any](handler handler[BodyType, ResponseType]) []gin.HandlerFunc {
 	return []gin.HandlerFunc{
 		func(ctx *gin.Context) {
-			var json BodyType
-			{
-				err := ctx.BindJSON(json)
+			var body BodyType
+			if _, isEmpty := any(body).(empty); !isEmpty {
+				err := ctx.BindJSON(&body)
 				if err != nil {
 					ctx.AbortWithError(http.StatusInternalServerError, err)
 					return
@@ -66,7 +66,7 @@ func handle[BodyType any, ResponseType any](handler handler[BodyType, ResponseTy
 
 			response, err := handler(ctx, requestParams[BodyType]{
 				cameraId: cameraId,
-				body:     json,
+				body:     body,
 			})
 			if err != nil {
 				ctx.AbortWithError(http.StatusInternalServerError, err)
