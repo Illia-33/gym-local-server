@@ -31,7 +31,7 @@ func main() {
 	}
 
 	enc := yaml.NewEncoder(file)
-	err = enc.Encode(*config)
+	err = enc.Encode(config)
 	if err != nil {
 		fmt.Printf("encoding failed: %v\n", err)
 		os.Exit(1)

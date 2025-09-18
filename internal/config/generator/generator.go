@@ -15,10 +15,10 @@ type Host struct {
 	Name string `json:"name"`
 }
 
-func Run(interfaceName string) (*cfg.Config, error) {
+func Run(interfaceName string) (cfg.Config, error) {
 	devices, err := discovery.SendProbe(interfaceName, nil, []string{"dn:NetworkVideoTransmitter"}, map[string]string{"dn": "http://www.onvif.org/ver10/network/wsdl"})
 	if err != nil {
-		return nil, err
+		return cfg.Config{}, err
 	}
 
 	var config cfg.Config
@@ -65,5 +65,5 @@ func Run(interfaceName string) (*cfg.Config, error) {
 		config.Cameras = append(config.Cameras, camera)
 	}
 
-	return &config, nil
+	return cfg.Config{}, nil
 }
