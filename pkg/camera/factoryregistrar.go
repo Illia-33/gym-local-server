@@ -1,25 +1,19 @@
 package camera
 
 import (
-	cfg "github.com/Illia-33/gym-localserver/pkg/config"
-
 	"fmt"
 )
 
-type PtzCameraFactory interface {
-	Create(c *cfg.Camera) (PtzCamera, error)
+var camera_factories_registrar = map[string]CameraFactory{}
+
+func RegisterFactory(cameraType string, f CameraFactory) {
+	camera_factories_registrar[cameraType] = f
 }
 
-var cameraFactoriesRegistrar = map[cfg.Type]PtzCameraFactory{}
-
-func RegisterFactory(cameraType cfg.Type, f PtzCameraFactory) {
-	cameraFactoriesRegistrar[cameraType] = f
-}
-
-func Create(c *cfg.Camera) (PtzCamera, error) {
-	factory := cameraFactoriesRegistrar[c.Type]
+func Create(cameraType string, c Config) (Camera, error) {
+	factory := camera_factories_registrar[cameraType]
 	if factory == nil {
-		return nil, fmt.Errorf("unsupported camera type: %v", c.Type)
+		return Camera{}, fmt.Errorf("unsupported camera type: %v", cameraType)
 	}
 
 	return factory.Create(c)

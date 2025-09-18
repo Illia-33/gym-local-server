@@ -7,8 +7,9 @@ import (
 
 	"github.com/Illia-33/gym-localserver/pkg/camera"
 	cfg "github.com/Illia-33/gym-localserver/pkg/config"
+	"github.com/Illia-33/gym-localserver/pkg/onvif"
 
-	"github.com/Illia-33/gym-localserver/internal/localserver"
+	"github.com/Illia-33/gym-localserver/internal/localserver/server"
 
 	"gopkg.in/yaml.v3"
 )
@@ -19,8 +20,8 @@ var (
 )
 
 func main() {
-	onvifFactory := &camera.OnvifCameraFactory{}
-	camera.RegisterFactory(cfg.TypeOnvif, onvifFactory)
+	onvifFactory := &onvif.OnvifCameraFactory{}
+	camera.RegisterFactory(string(cfg.TypeOnvif), onvifFactory)
 
 	rawConfig, err := os.ReadFile(*configFile)
 	if err != nil {
@@ -33,6 +34,10 @@ func main() {
 		log.Fatalf("yaml unmarshal failed: %v", err)
 	}
 
-	server := localserver.Create(*bind, &config)
-	server.Run()
+	server, err := server.Create(&config)
+	if err != nil {
+		log.Fatalf("error creating server: %v", err)
+	}
+
+	server.Run(*bind)
 }

@@ -11,7 +11,7 @@ import (
 )
 
 const (
-	GymLocalServerUserAgent string = "GymLocalServer"
+	gym_local_server_user_agent string = "GymLocalServer"
 )
 
 type Client struct {
@@ -25,7 +25,7 @@ func (c *Client) Options() (*requests.OptionsResponse, error) {
 	request := requests.BuildOptionsRequest(requests.RequestHeader{
 		Uri:       c.Uri,
 		CSeq:      c.cseq,
-		UserAgent: GymLocalServerUserAgent,
+		UserAgent: gym_local_server_user_agent,
 	})
 
 	response, err := c.sendRequest(request)
@@ -40,7 +40,7 @@ func (c *Client) Describe() (*requests.DescribeResponse, error) {
 	request := requests.BuildDescribeRequest(requests.RequestHeader{
 		Uri:       c.Uri,
 		CSeq:      c.cseq,
-		UserAgent: GymLocalServerUserAgent,
+		UserAgent: gym_local_server_user_agent,
 	})
 	response, err := c.sendRequest(request)
 	if err != nil {
@@ -54,7 +54,7 @@ func (c *Client) Setup(videoUri string, port int) (*requests.SetupResponse, erro
 	request := requests.BuildSetupRequest(requests.RequestHeader{
 		Uri:       videoUri,
 		CSeq:      c.cseq,
-		UserAgent: GymLocalServerUserAgent,
+		UserAgent: gym_local_server_user_agent,
 	}, port)
 
 	response, err := c.sendRequest(request)
@@ -69,7 +69,7 @@ func (c *Client) Play(sessionId string) (*requests.PlayResponse, error) {
 	request := requests.BuildPlayRequest(requests.RequestHeader{
 		Uri:       c.Uri,
 		CSeq:      c.cseq,
-		UserAgent: GymLocalServerUserAgent,
+		UserAgent: gym_local_server_user_agent,
 	}, sessionId)
 
 	response, err := c.sendRequest(request)
@@ -84,7 +84,7 @@ func (c *Client) Pause(sessionId string) (*requests.PauseResponse, error) {
 	request := requests.BuildPauseRequest(requests.RequestHeader{
 		Uri:       c.Uri,
 		CSeq:      c.cseq,
-		UserAgent: GymLocalServerUserAgent,
+		UserAgent: gym_local_server_user_agent,
 	}, sessionId)
 
 	response, err := c.sendRequest(request)
@@ -99,7 +99,7 @@ func (c *Client) Teardown(sessionId string) (*requests.TeardownResponse, error) 
 	request := requests.BuildTeardownRequest(requests.RequestHeader{
 		Uri:       c.Uri,
 		CSeq:      c.cseq,
-		UserAgent: GymLocalServerUserAgent,
+		UserAgent: gym_local_server_user_agent,
 	}, sessionId)
 
 	response, err := c.sendRequest(request)

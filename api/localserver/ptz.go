@@ -10,12 +10,3 @@ type StartPtzRequest struct {
 	Velocity Velocity `json:"velocity"`
 	Deadline string   `json:"deadline"`
 }
-
-type StartPtzResponse struct {
-}
-
-type EndPtzRequest struct {
-}
-
-type EndPtzResponse struct {
-}
