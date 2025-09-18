@@ -39,6 +39,6 @@ go.work.sum
 # Built Visual Studio Code Extensions
 *.vsix
 
-cfgr
-srvr
+configurator
+server
 config.yml
