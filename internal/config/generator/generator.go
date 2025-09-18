@@ -65,5 +65,7 @@ func Run(interfaceName string) (cfg.Config, error) {
 		config.Cameras = append(config.Cameras, camera)
 	}
 
-	return cfg.Config{}, nil
+	config.Settings.AuthKey = "<auth_key>"
+
+	return config, nil
 }
