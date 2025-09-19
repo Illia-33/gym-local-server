@@ -1,6 +1,8 @@
 package server
 
 import (
+	"context"
+
 	"github.com/Illia-33/gym-localserver/internal/localserver/service"
 	cfg "github.com/Illia-33/gym-localserver/pkg/config"
 
@@ -29,5 +31,6 @@ func Create(config *cfg.Config) (Server, error) {
 }
 
 func (s *Server) Run(addr string) error {
+	s.service.Start(context.Background())
 	return s.engine.Run(addr)
 }
