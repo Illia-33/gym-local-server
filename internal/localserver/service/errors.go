@@ -16,3 +16,10 @@ type ErrorNoWorkingCameras struct {
 func (e ErrorNoWorkingCameras) Error() string {
 	return "no working camera has been found"
 }
+
+type ErrorNoVideoTrack struct {
+}
+
+func (e ErrorNoVideoTrack) Error() string {
+	return "camera has no video track"
+}

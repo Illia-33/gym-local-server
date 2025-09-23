@@ -10,12 +10,12 @@ import (
 )
 
 type Server struct {
-	service *service.Service
+	service *service.GymCameraService
 	engine  *gin.Engine
 }
 
 func Create(config *cfg.Config) (Server, error) {
-	service := service.Service{}
+	service := service.GymCameraService{}
 	err := service.InitWithConfig(config)
 	if err != nil {
 		return Server{}, err

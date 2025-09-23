@@ -110,14 +110,8 @@ func (c *Client) Teardown(sessionId string) (*requests.TeardownResponse, error) 
 	return requests.ParseTeardownResponse(response)
 }
 
-func (c *Client) GetPacketReceiver(port int) PacketReceiver {
-	return PacketReceiver{
-		Port: port,
-	}
-}
-
-func (c *Client) Close() {
-	c.socket.Close()
+func (c *Client) Close() error {
+	return c.socket.Close()
 }
 
 func (c *Client) sendRequest(request string) ([]byte, error) {

@@ -1,5 +1,6 @@
 package camera
 
 type Camera struct {
-	Ptz PtzContoller
+	Ptz    PtzContoller
+	Stream StreamController
 }

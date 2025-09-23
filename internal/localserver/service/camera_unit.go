@@ -5,12 +5,12 @@ import (
 	cfg "github.com/Illia-33/gym-localserver/pkg/config"
 )
 
-type cameraUnit struct {
-	config cfg.Camera
-	camera cam.Camera
+type CameraUnit struct {
+	Config cfg.Camera
+	Camera cam.Camera
 }
 
-func newCameraUnit(cfg cfg.Camera) (cameraUnit, error) {
+func newCameraUnit(cfg cfg.Camera) (CameraUnit, error) {
 	camera, err := cam.Create(string(cfg.Type), cam.Config{
 		Ip:       cfg.Ip,
 		Port:     int(cfg.Port),
@@ -18,11 +18,11 @@ func newCameraUnit(cfg cfg.Camera) (cameraUnit, error) {
 		Password: cfg.Password,
 	})
 	if err != nil {
-		return cameraUnit{}, err
+		return CameraUnit{}, err
 	}
 
-	return cameraUnit{
-		config: cfg,
-		camera: camera,
+	return CameraUnit{
+		Config: cfg,
+		Camera: camera,
 	}, nil
 }

@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"net/http"
+	"time"
 
 	cam "github.com/Illia-33/gym-localserver/pkg/camera"
 
@@ -14,10 +15,12 @@ import (
 
 func CreateOnvifCamera(c cam.Config) (cam.Camera, error) {
 	dev, err := onvif.NewDevice(onvif.DeviceParams{
-		Xaddr:      fmt.Sprintf("%s:%d", c.Ip, c.Port),
-		Username:   c.Login,
-		Password:   c.Password,
-		HttpClient: new(http.Client),
+		Xaddr:    fmt.Sprintf("%s:%d", c.Ip, c.Port),
+		Username: c.Login,
+		Password: c.Password,
+		HttpClient: &http.Client{
+			Timeout: 10 * time.Second,
+		},
 	})
 	if err != nil {
 		return cam.Camera{}, err
@@ -28,10 +31,16 @@ func CreateOnvifCamera(c cam.Config) (cam.Camera, error) {
 		return cam.Camera{}, err
 	}
 
+	profileToken := profiles.Profiles[0].Token
+
 	return cam.Camera{
 		Ptz: &ptzController{
 			device:       dev,
-			profileToken: profiles.Profiles[0].Token,
+			profileToken: profileToken,
+		},
+		Stream: &streamController{
+			device:       dev,
+			profileToken: profileToken,
 		},
 	}, nil
 }

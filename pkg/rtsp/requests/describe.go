@@ -5,7 +5,7 @@ import (
 	"errors"
 	"strings"
 
-	"github.com/Illia-33/gym-localserver/pkg/rtsp/sdp"
+	"github.com/Illia-33/gym-localserver/pkg/sdp"
 )
 
 type DescribeResponse struct {
