@@ -1,112 +1,139 @@
-openapi: 3.0.2
+openapi: 3.0.3
 info:
-  version: 1.0.0
-  title: local server schema
-tags:
-  - name: camera
+  title: Camera Control API
+  version: "1.0"
+servers:
+  - url: /api/v1
 paths:
   /cameras:
-    tags:
-      - camera
     get:
+      summary: Get list of cameras
       operationId: getCameras
       responses:
-        '200':
+        "200":
+          description: List of available cameras
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CamerasList'
-  /cameras/{cameraId}/ptz:
+                $ref: "#/components/schemas/GetCamerasResponse"
+
+  /camera/{camera_id}/ptz:
     post:
-      tags:
-        - camera
-      operationId: startCameraAction
+      summary: Start PTZ control
+      operationId: startPtz
       parameters:
-        - name: cameraId
+        - name: camera_id
           in: path
           required: true
           schema:
-            $ref: '#/components/schemas/CameraId'
-      responses:
-        '200':
-            $ref: '#/components/responses/Ok'
+            type: string
+          description: Camera identifier
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/ActionParams'
+              $ref: "#/components/schemas/StartPtzRequest"
+      responses:
+        "200":
+          description: PTZ started
     delete:
-      tags:
-        - camera
-      operationId: stopCameraAction
+      summary: Stop PTZ control
+      operationId: stopPtz
       parameters:
-        - name: cameraId
+        - name: camera_id
           in: path
           required: true
           schema:
-            $ref: '#/components/schemas/CameraId'
+            type: string
+          description: Camera identifier
       responses:
-        '200':
-            $ref: '#/components/responses/Ok'
+        "200":
+          description: PTZ stopped
+
+  /camera/{camera_id}/webrtc:
+    post:
+      summary: Setup WebRTC session
+      operationId: setupWebRTC
+      parameters:
+        - name: camera_id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Camera identifier
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SetupWebRTCRequest"
+      responses:
+        "200":
+          description: WebRTC connection info
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SetupWebRTCResponse"
+
 components:
   schemas:
-    ActionParams:
-        type: object
-        required:
-          - velocity
-          - deadline
-        properties:
-            velocity:
-              type: object
-              required:
-                - pan
-                - tilt
-                - zoom
-              properties:
-                pan:
-                    type: number
-                    format: float
-                tilt:
-                    type: number
-                    format: float
-                zoom:
-                    type: number
-                    format: float
-            deadline:
-              type: string
-    CamerasList:
-      description: Local server cameras list
+    CameraDescription:
       type: object
-      required:
-        - cameras
       properties:
-          cameras:
-            type: array
-            items:
-              $ref: '#/components/schemas/Camera'
-    Camera:
-      description: Local server cameras info
-      type: object
-      required:
-        - camera_id
-        - description
-      properties:
-          camera_id:
-            $ref: '#/components/schemas/CameraId'
-          description:
-            description: Camera area description
-            type: string
-    CameraId:
-      description: Camera unique id in local gym server
-      $ref: '#/components/schemas/Id'
-    Id:
-      type: integer
-      format: int64
-  responses:
-    Ok:
-      content:
-        application/json:
-          schema:
-            type: object
+        label:
+          type: string
+        description:
+          type: string
+      required: [label, description]
 
+    GetCamerasResponse:
+      type: object
+      properties:
+        cameras:
+          type: array
+          items:
+            $ref: "#/components/schemas/CameraDescription"
+      required: [cameras]
+
+    Velocity:
+      type: object
+      properties:
+        pan:
+          type: number
+          format: float
+        tilt:
+          type: number
+          format: float
+        zoom:
+          type: number
+          format: float
+      required: [pan, tilt, zoom]
+
+    StartPtzRequest:
+      type: object
+      properties:
+        velocity:
+          $ref: "#/components/schemas/Velocity"
+        deadline:
+          type: string
+          description: Deadline timestamp (RFC3339 or ISO8601)
+      required: [velocity, deadline]
+
+    SetupWebRTCRequest:
+      type: object
+      properties:
+        offer_b64:
+          type: string
+          description: Base64-encoded SDP offer
+      required: [offer_b64]
+
+    SetupWebRTCResponse:
+      type: object
+      properties:
+        id:
+          type: string
+        local_desc_b64:
+          type: string
+          description: Base64-encoded local SDP answer
+      required: [id, local_desc_b64]
