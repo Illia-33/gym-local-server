@@ -1,14 +1,24 @@
 openapi: 3.0.3
 info:
-  title: Camera Control API
-  version: "1.0"
+
+
+  title: Gym Local Server - Camera Control API
+  description: |
+    RESTful API for managing IP cameras with PTZ (Pan-Tilt-Zoom) control and WebRTC streaming capabilities.
+  version: "1.0.0"
 servers:
   - url: /api/v1
+    description: Local server API endpoint
 paths:
   /cameras:
     get:
       summary: Get list of cameras
+      description: |
+        Retrieves information about all available cameras configured in the system.
+        Returns camera labels and descriptions for UI display.
       operationId: getCameras
+      tags:
+        - Cameras
       responses:
         "200":
           description: List of available cameras
@@ -16,124 +26,294 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/GetCamerasResponse"
+              example:
+                cameras:
+                  - label: "Camera 1"
+                    description: "Front entrance camera"
+                  - label: "Camera 2"
+                    description: "Main gym area"
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
 
   /camera/{camera_id}/ptz:
     post:
       summary: Start PTZ control
+      description: |
+        Initiates PTZ (Pan-Tilt-Zoom) control for a specific camera with specified velocities.
+        The camera will move according to the provided velocity values until the deadline is reached
+        or a stop command is issued.
+        
+        **Velocity Ranges:**
+        - `pan`: -1.0 (full left) to 1.0 (full right)
+        - `tilt`: -1.0 (full down) to 1.0 (full up)
+        - `zoom`: -1.0 (full zoom out) to 1.0 (full zoom in)
+        
+        **Deadline Format**: Duration string (e.g., "5s", "1m", "30s")
       operationId: startPtz
+      tags:
+        - PTZ Control
       parameters:
         - name: camera_id
           in: path
           required: true
           schema:
-            type: string
-          description: Camera identifier
+
+
+            type: integer
+            format: int32
+            minimum: 0
+          description: Zero-based camera index
+          example: 0
       requestBody:
         required: true
+        description: PTZ control parameters including velocity and deadline
         content:
           application/json:
             schema:
               $ref: "#/components/schemas/StartPtzRequest"
+            example:
+              velocity:
+                pan: 0.5
+                tilt: 0.3
+                zoom: 0.0
+              deadline: "5s"
       responses:
         "200":
-          description: PTZ started
+
+          description: PTZ control started successfully
+        "400":
+          description: Invalid request parameters
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "404":
+          description: Camera not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
     delete:
       summary: Stop PTZ control
+      description: |
+        Immediately stops all PTZ movements for the specified camera.
+        This command can be used to halt movement before the deadline expires.
       operationId: stopPtz
+      tags:
+        - PTZ Control
       parameters:
         - name: camera_id
           in: path
           required: true
           schema:
-            type: string
-          description: Camera identifier
+
+
+            type: integer
+            format: int32
+            minimum: 0
+          description: Zero-based camera index
+          example: 0
       responses:
         "200":
-          description: PTZ stopped
+
+          description: PTZ control stopped successfully
+        "404":
+          description: Camera not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
 
   /camera/{camera_id}/webrtc:
     post:
       summary: Setup WebRTC session
+      description: |
+        Establishes a WebRTC connection for real-time video streaming from the specified camera.
+        
+        **Process:**
+        1. Client creates WebRTC peer connection and generates SDP offer
+        2. Client encodes the offer in base64 and sends it to this endpoint
+        3. Server processes the offer and returns base64-encoded SDP answer
+        4. Client sets the remote description using the returned answer
+        5. Video streaming begins automatically
+        
+        The server will automatically start streaming video packets to the established WebRTC connection.
       operationId: setupWebRTC
+      tags:
+        - Streaming
       parameters:
         - name: camera_id
           in: path
           required: true
           schema:
-            type: string
-          description: Camera identifier
+
+
+            type: integer
+            format: int32
+            minimum: 0
+          description: Zero-based camera index
+          example: 0
       requestBody:
         required: true
+        description: WebRTC SDP offer encoded in base64
         content:
           application/json:
             schema:
               $ref: "#/components/schemas/SetupWebRTCRequest"
+            example:
+              offer_b64: "dlwwIDAgSU4gSVA0IDEyNy4wLjAuMQ=="
       responses:
         "200":
-          description: WebRTC connection info
+
+          description: WebRTC connection established successfully
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/SetupWebRTCResponse"
+              example:
+                id: "550e8400-e29b-41d4-a716-446655440000"
+                local_desc_b64: "dlwwIDAgSU4gSVA0IDEyNy4wLjAuMQ=="
+        "400":
+          description: Invalid SDP offer format
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "404":
+          description: Camera not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "500":
+          description: Internal server error or video track not available
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
 
 components:
   schemas:
     CameraDescription:
       type: object
+      description: Information about a camera device
       properties:
         label:
           type: string
+          description: Unique identifier/name for the camera
+          example: "Camera 1"
         description:
           type: string
+          description: Human-readable description of the camera location or purpose
+          example: "Front entrance camera"
       required: [label, description]
 
     GetCamerasResponse:
       type: object
+      description: Response containing list of all available cameras
       properties:
         cameras:
           type: array
+          description: Array of camera descriptions
           items:
             $ref: "#/components/schemas/CameraDescription"
       required: [cameras]
 
     Velocity:
       type: object
+      description: PTZ velocity parameters for camera movement
       properties:
         pan:
           type: number
           format: float
+          description: Horizontal movement speed (-1.0 = full left, 1.0 = full right, 0.0 = no movement)
+          minimum: -1.0
+          maximum: 1.0
+          example: 0.5
         tilt:
           type: number
           format: float
+          description: Vertical movement speed (-1.0 = full down, 1.0 = full up, 0.0 = no movement)
+          minimum: -1.0
+          maximum: 1.0
+          example: 0.3
         zoom:
           type: number
           format: float
+          description: Zoom speed (-1.0 = full zoom out, 1.0 = full zoom in, 0.0 = no zoom)
+          minimum: -1.0
+          maximum: 1.0
+          example: 0.0
       required: [pan, tilt, zoom]
 
     StartPtzRequest:
       type: object
+      description: Request to start PTZ control with specified parameters
       properties:
         velocity:
           $ref: "#/components/schemas/Velocity"
         deadline:
           type: string
-          description: Deadline timestamp (RFC3339 or ISO8601)
+
+          description: Duration string for how long the PTZ movement should last (e.g., "5s", "1m", "30s")
+          pattern: '^\d+[smh]$'
+          example: "5s"
       required: [velocity, deadline]
 
     SetupWebRTCRequest:
       type: object
+      description: Request to establish WebRTC connection with SDP offer
       properties:
         offer_b64:
           type: string
-          description: Base64-encoded SDP offer
+
+          description: Base64-encoded SDP (Session Description Protocol) offer from the client
+          format: byte
+          example: "dlwwIDAgSU4gSVA0IDEyNy4wLjAuMQ=="
       required: [offer_b64]
 
     SetupWebRTCResponse:
       type: object
+      description: Response containing WebRTC connection details
       properties:
         id:
           type: string
+          description: Unique identifier for the WebRTC connection session
+          format: uuid
+          example: "550e8400-e29b-41d4-a716-446655440000"
         local_desc_b64:
           type: string
-          description: Base64-encoded local SDP answer
+
+          description: Base64-encoded SDP answer from the server
+          format: byte
+          example: "dlwwIDAgSU4gSVA0IDEyNy4wLjAuMQ=="
       required: [id, local_desc_b64]
+    
+    Error:
+      type: object
+      description: Error response
+      properties:
+        error:
+          type: string
+          description: Error message describing what went wrong
+          example: "Camera not found"
+        code:
+          type: integer
+          description: HTTP status code
+          example: 404
